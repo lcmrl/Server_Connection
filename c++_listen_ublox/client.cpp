@@ -13,6 +13,8 @@
 #include <filesystem>
 #include <unistd.h>
 #include <algorithm>
+#include <chrono>
+#include <ctime>
 
 using namespace std;
 
@@ -99,11 +101,11 @@ int main()
     */
 
     int client;
-    int portNum = 8080; // NOTE that the port number is same for both client and server
+    int portNum = 61111; // NOTE that the port number is same for both client and server
     bool isExit = false;
-    int bufsize = 1024;//1024
+    int bufsize = 1024; //1024
     char buffer[bufsize];
-    char ip[] = "192.168.43.210"; // char* ip = "127.0.0.1";
+    char ip[] = "127.0.0.1";
 
     struct sockaddr_in server_addr;
 
@@ -224,15 +226,36 @@ int main()
     */
 
     cout << "=> Awaiting confirmation from the server..." << endl; //line 40
-    recv(client, buffer, bufsize, 0);
+    //std::vector <char> provaciao;
+    int ricevuto;
+    //ricevuto = recv(client, &provaciao, bufsize, 0);
+    //cout << ricevuto << endl;
+    //string str(provaciao.begin(),provaciao.end());
+    //cout << str << endl;
+    //printf("%s\n",str.c_str());
+
+
+    ricevuto = recv(client, &buffer, bufsize, 0);
+    cout << ricevuto << endl;
+    cout << buffer << endl;
+
+    //https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c
+    //https://www.ibm.com/docs/en/zos/2.4.0?topic=functions-strftime-convert-formatted-time
+    //https://www.programiz.com/cpp-programming/library-function/ctime/clock
+    auto start = std::chrono::system_clock::now();
+    std::time_t start_time = std::chrono::system_clock::to_time_t(start);
+    cout << "finished at" << std::ctime(&start_time) << endl;
+
+
+
     cout << "=> Connection confirmed, you are good to go...";
 
-    cout << "\n\n=> Enter # to end the connection\n" << endl;
+    //cout << "\n\n=> Enter # to end the connection\n" << endl;
 
 
 
     /* LISTING FILE IN THE IMG DIRECTORY */
-
+/*
     string IMG_FOLDER = "/home/pi/Desktop/github_lcmrl/RaspberryPiBlack/photos";
 
     vector<string> IMG_LIST;
@@ -271,12 +294,12 @@ int main()
     //for(int i=0; i<NOT_PROCESSED_IMAGES.size(); i++){cout << NOT_PROCESSED_IMAGES[i] << endl;}
     IMG_LIST.insert(IMG_LIST.end(), NOT_PROCESSED_IMAGES.begin(), NOT_PROCESSED_IMAGES.end());
     NOT_PROCESSED_IMAGES.clear();
-    
+*/    
 
 
     //bool found = ((find(IMG_LIST.begin(), IMG_LIST.end(), "ciao")) != IMG_LIST.end());
     //for(int i=0; i<NOT_PROCESSED_IMAGES.size(); i++){cout << NOT_PROCESSED_IMAGES[i] << endl;}
-    }
+//    }
 
 
 
@@ -304,7 +327,7 @@ int main()
     //std::ifstream file (L"/home/luca/Scrivania/socket_c++/mine3_images/luca.jpeg", std::ios::binary | std::ios::out);
     //file.write(provabuffer, provabufsize)
     //cout << "OK \n";
-
+/*
     ifstream my_image("cat.jpeg", ios::in|ios::binary);
     ofstream out_image("xxxxxxxxxxxxxx.jpeg", ios::out|ios::binary);
     char ch;
@@ -318,6 +341,7 @@ int main()
         vec.emplace_back(ch);
     }
     cout << "vec.size()" << vec.size() << endl;
+*/
     /*send(client, &vec[0], vec.size(), 0);*/
 
     //cout << "my_image.eof()" << my_image.eof();
@@ -335,7 +359,7 @@ int main()
     out_image.close();
 */
 
-
+/*
     int costante = 3000;
 
     int rest = vec.size() % bufsize; //vec.size()
@@ -372,7 +396,7 @@ int main()
     }
     while(control == 0);
 
-
+*/
     /* ---------------- CLOSE CALL ------------- */
     /* ----------------- close() --------------- */
 

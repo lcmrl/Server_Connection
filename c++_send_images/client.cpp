@@ -233,7 +233,7 @@ int main()
 
     /* LISTING FILE IN THE IMG DIRECTORY */
 
-    string IMG_FOLDER = "/home/pi/Desktop/photos/imgs";
+    string IMG_FOLDER = "/home/pi/Desktop/github_lcmrl/RaspberryPiBlack/photos";
 
     vector<string> IMG_LIST;
     int max =2000;
