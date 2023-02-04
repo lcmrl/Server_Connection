@@ -103,7 +103,7 @@ int main()
     bool isExit = false;
     int bufsize = 1024;//1024
     char buffer[bufsize];
-    char ip[] = "192.168.43.210"; // char* ip = "127.0.0.1";
+    char ip[] = "192.168.43.210";//"192.168.43.97";// "192.168.43.210"; // char* ip = "127.0.0.1";
 
     struct sockaddr_in server_addr;
 
@@ -263,15 +263,37 @@ int main()
     send(client, &n_imgs_conv, sizeof(n_imgs), 0);
 
 
+    // order imgs
+    vector <int> numeric_id;
+    vector <string> ordered_imgs;
+    for (int f=0; f<NOT_PROCESSED_IMAGES.size(); f++){
+        filesystem::path p(NOT_PROCESSED_IMAGES[f]);
+        string numeric_part = p.filename().generic_string().substr(3, p.filename().generic_string().size()-7); //p.stem() p.filename() p.extension() p.generic_string()
+        int nu = std::stoi(numeric_part);
+        numeric_id.emplace_back(nu);
+    }
+
+    std::sort(numeric_id.begin(), numeric_id.end());
+
+    for (int g=0; g<NOT_PROCESSED_IMAGES.size(); g++){
+        string temp = std::to_string(numeric_id[g]);
+        string new_img_name = IMG_FOLDER + "/" + "img" + temp + ".jpg";
+        ordered_imgs.emplace_back(new_img_name);
+    }
 
 
     // SEND IMAGES
-    SendImages(NOT_PROCESSED_IMAGES, client, bufsize);
+    //SendImages(NOT_PROCESSED_IMAGES, client, bufsize);
+    SendImages(ordered_imgs, client, bufsize);
 
     //for(int i=0; i<NOT_PROCESSED_IMAGES.size(); i++){cout << NOT_PROCESSED_IMAGES[i] << endl;}
-    IMG_LIST.insert(IMG_LIST.end(), NOT_PROCESSED_IMAGES.begin(), NOT_PROCESSED_IMAGES.end());
+    //IMG_LIST.insert(IMG_LIST.end(), NOT_PROCESSED_IMAGES.begin(), NOT_PROCESSED_IMAGES.end());
+    //NOT_PROCESSED_IMAGES.clear();
+
+    IMG_LIST.insert(IMG_LIST.end(), ordered_imgs.begin(), ordered_imgs.end());
     NOT_PROCESSED_IMAGES.clear();
-    
+    ordered_imgs.clear();
+
 
 
     //bool found = ((find(IMG_LIST.begin(), IMG_LIST.end(), "ciao")) != IMG_LIST.end());
